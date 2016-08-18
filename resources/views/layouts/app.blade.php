@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="token" id="token" value="{{csrf_token()}}">
+
     <title>Laravel</title>
 
     <!-- Fonts -->
@@ -14,7 +14,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
-<link rel="stylesheet" href="/css/app.css">
+
     <style>
         body {
             font-family: 'Lato';
@@ -26,7 +26,7 @@
     </style>
 </head>
 <body id="app-layout">
-    <nav class="navbar navbar-default navbar-static-top" id="UserLoginController">
+    <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
 
@@ -40,39 +40,38 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    BrainPower
+                    Laravel
                 </a>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
-                <!-- <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav">
                     <li><a href="{{ url('/home') }}">Home</a></li>
-                </ul> -->
+                </ul>
 
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
-                    <!-- 未登录时显示 -->
-                        <li v-show="!guest"><a @click="">Login</a></li>
-                        <li v-show="!guest"><a @click="">Register</a></li>
-                    <!-- 已登录时显示 -->
-                        <li class="dropdown" v-show="guest">
+                    @if (Auth::guest())
+                        <li><a href="{{ url('/login') }}">Login</a></li>
+                        <li><a href="{{ url('/register') }}">Register</a></li>
+                    @else
+                        <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                @{{ user.name }} <span class="caret"></span>
+                                {{ Auth::user()->name }} <span class="caret"></span>
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
-                                <!-- <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li> -->
-                                <li><a @click=""><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>
+                    @endif
                 </ul>
             </div>
         </div>
     </nav>
-<script src="/js/vendor.js"></script>
-<script src="/js/controller/UserLoginController.js"></script>
+
     @yield('content')
 
     <!-- JavaScripts -->

@@ -11,14 +11,16 @@
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::auth();
 
-Route::get('/', 'HomeController@index');
-
-Route::get('/api/check', function(){
-  return response()->json(Auth::check());
+Route::get('/home', 'HomeController@index');
+Route::group(['prefix'=>'api'],function(){
+    Route::get('check','ApiController@check');
+});
+Route::group(['prefix'=>'my','middleware'=>'auth'],function (){
+    Route::get('game','GameController@index');
 });
