@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Game;
+use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -13,12 +15,20 @@ class GameController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
         //
-        return "123";
+        return view('my/myPage')->withUser(User::with('myGames')->find($id));
     }
 
+    public function showEditGame($user_id,$id){
+        if(User::find($user_id)){
+            return view('my/editGame')->withGame(Game::find($id));
+            return response()->json(['user_id'=>$user_id,'id'=>$id]);
+        }else{
+            return "no found";
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *

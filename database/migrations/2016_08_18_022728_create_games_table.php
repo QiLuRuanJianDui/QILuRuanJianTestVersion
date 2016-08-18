@@ -14,10 +14,11 @@ class CreateGamesTable extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
             $table->integer('user_id');
             $table->integer('template_id');
             $table->string('user_name');
-            $table->string('introduction');
+            $table->string('introduction')->nullable();
             $table->timestamps();
         });
     }
