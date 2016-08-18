@@ -4,6 +4,7 @@
 
 
     <div class="container">
+        <a class="col-md-10 col-md-offset-1 btn btn-success" href="{{url('/my/'.Auth::user()->id).'/template'}}" style="margin-top: 30px;margin-bottom: 30px;">add</a>
 @foreach($user->myGames as $game)
         <div class="row">
             <div class="col-md-10 col-md-offset-1" v-for="game in games">

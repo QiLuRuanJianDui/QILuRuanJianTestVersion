@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Game;
+use App\Template;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -20,15 +21,34 @@ class GameController extends Controller
         //
         return view('my/myPage')->withUser(User::with('myGames')->find($id));
     }
-
+/**
+ * judge the request and return view
+ *
+ * @return \Illuminate\Http\Response
+ * */
     public function showEditGame($user_id,$id){
-        if(User::find($user_id)){
+        $game = Game::find($id);
+        if($user_id==$game{'user_id'}){
             return view('my/editGame')->withGame(Game::find($id));
-            return response()->json(['user_id'=>$user_id,'id'=>$id]);
+        }else{
+            return "404 No Found!!!!";
+        }
+        /*if(Game::where('user_id',$user_id)){
+            return view('my/editGame')->withGame(Game::find($id));
         }else{
             return "no found";
-        }
+        }*/
     }
+    /**
+     * return user_id id view
+     * @return \Illuminate\Http\Response
+     *
+     * */
+    public function showAddGame($id){
+        return view('my/addGame')->withTemplate(Template::find($id));
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
