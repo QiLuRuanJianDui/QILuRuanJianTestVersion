@@ -22,6 +22,9 @@ Route::get('/game/{id}','PlayController@index');
 Route::group(['prefix'=>'api'],function(){
     Route::get('check','ApiController@check');
     /*Route::get('showGames','ApiController@showGames');*/
+    Route::get('config/{game_id}','ApiController@showConfig');
+    Route::get('comments/{game_id}','ApiController@showComment');
+    Route::post('comments/{game_id}','ApiController@storeComment');
 });
 Route::group(['prefix'=>'/my','middleware'=>'auth'],function (){
 
@@ -30,6 +33,9 @@ Route::group(['prefix'=>'/my','middleware'=>'auth'],function (){
     Route::get('/{id}/template','TemplateController@index');
     Route::get('/{user_id}/game/{id}','GameController@showEditGame');
     Route::get('/template/{id}/addGame','GameController@showAddGame');
+    Route::post('template/{id}/addGame','GameController@storeGame');
+
+//    Route::post('{id}/upload','GameController@uploadGame');
     /*Route::post('/game','GameController@create');
     Route::patch('/game/{id}','GameController@update');
     Route::delete('/game/{id}','GameController@delete');*/

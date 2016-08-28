@@ -18,6 +18,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home')->withGames(Game::all());
+        return view('home')->withGames(Game::orderBy('updated_at', 'desc')->get());
     }
 }

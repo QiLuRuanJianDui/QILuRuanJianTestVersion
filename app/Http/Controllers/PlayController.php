@@ -6,12 +6,22 @@ use App\Game;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Storage;
 
 class PlayController extends Controller
 {
     //
     public function index($id){
-        return view('play')->withGame(Game::with('hasManyComments')->find($id));
+        if(Game::findOrFail($id)){
+            $filename = $id . '.json';
+            $data = [
+                'game' => Game::with('hasManyComments')->find($id),
+                'config'=> json_decode(Storage::get($filename)),
+            ];
+            return view('play',$data);
+        }else{
+            return '404';
+        }
 //        return Game::with('hasManyComments')->find($id);
     }
 }

@@ -1,0 +1,59 @@
+@media screen and (min-width: 768px){
+    #content{
+        height:500px;
+        width:100%;
+        background: red;
+    }
+}
+@media screen and (max-width: 768px){
+    #content{
+        height:100%;
+        width:100%;
+        background: #000;
+    }
+}
+html,body{
+    height:100%;
+    width:100%;
+    padding:0;
+    margin:0;
+}
+
+#content{
+
+
+    /*background: red;*/
+
+    margin:0;
+    position: relative;
+    overflow: hidden;
+    -webkit-transition: all 0.35s;
+    -moz-transition: all 0.35s;
+    -ms-transition: all 0.35s;
+    -o-transition: all 0.35s;
+    transition: all 0.35s;
+}
+#canvas{
+    height:100%;
+    width:100%;
+}
+
+.spirit{
+    height:100px;
+    width:100px;
+    background: blue;
+    position: absolute;
+    top:0;
+    border-radius:50%;
+}
+.MainSpirit{
+    height:100px;
+    width:100px;
+    background: blue;
+    position: absolute;
+    top:0;
+    border-radius:50%;
+}
+#start{
+    position: absolute;
+}
