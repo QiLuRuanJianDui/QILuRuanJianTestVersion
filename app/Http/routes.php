@@ -25,6 +25,8 @@ Route::group(['prefix'=>'api'],function(){
     Route::get('config/{game_id}','ApiController@showConfig');
     Route::get('comments/{game_id}','ApiController@showComment');
     Route::post('comments/{game_id}','ApiController@storeComment');
+    Route::get('showMyGames','ApiController@showUserGame');
+    Route::delete('deleteMyGame/{game_id}','ApiController@deleteUserGame');
 });
 Route::group(['prefix'=>'/my','middleware'=>'auth'],function (){
 
@@ -34,6 +36,7 @@ Route::group(['prefix'=>'/my','middleware'=>'auth'],function (){
     Route::get('/{user_id}/game/{id}','GameController@showEditGame');
     Route::get('/template/{id}/addGame','GameController@showAddGame');
     Route::post('template/{id}/addGame','GameController@storeGame');
+    Route::put('/{id}/updateGame','GameController@updateGame');
 
 //    Route::post('{id}/upload','GameController@uploadGame');
     /*Route::post('/game','GameController@create');

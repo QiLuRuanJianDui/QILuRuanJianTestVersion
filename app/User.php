@@ -24,6 +24,6 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
     public function myGames(){
-        return $this->hasMany('App\Game','user_id','id');
+        return $this->hasMany('App\Game','user_id','id')->orderBy('updated_at','desc');
     }
 }

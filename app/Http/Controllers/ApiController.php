@@ -36,7 +36,7 @@ class ApiController extends Controller
      **/
     function showConfig($game_id){
         if(Game::findOrFail($game_id)){
-            $filename = $game_id.'.json';
+            $filename = 'configData/'.$game_id.'.json';
             return response()->json(json_decode(Storage::get($filename)));
         }else{
             return 'file is no found';
@@ -70,5 +70,36 @@ class ApiController extends Controller
             return $request;
         }
         return response()->json($comment);
+    }
+
+    /**
+     * @return mixed
+     *
+     */
+    function showUserGame(){
+        if(Auth::check()){
+            return response()->json(Game::Where('user_id',Auth::user()->id)->orderBy('updated_at','desc')->get());
+        }else{
+            return 'you are not login';
+        }
+    }
+
+    /**
+     * @param $game_id
+     * @return int
+     */
+    function deleteUserGame($game_id){
+        $data = Storage::get('configData/'.$game_id.'.json');
+        $data = json_decode($data);
+        Storage::delete($data->mainSpirit->src);
+        for($i=0;$i<count($data->spirits);$i++){
+            Storage::delete($data->spirits[$i]->src);
+        }
+        Storage::delete('configData/'.$game_id.'.json');
+        if(Auth::check()&&Game::findOrFail($game_id)->user_id == Auth::user()->id){
+            return Game::destroy($game_id);
+        }else{
+            return 'you are not login';
+        }
     }
 }

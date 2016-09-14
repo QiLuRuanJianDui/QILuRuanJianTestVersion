@@ -52,28 +52,30 @@ class GameController extends Controller
      **/
     public function storeGame($id,Request $request){
         $game = new Game();
+        $game->user_id = Auth::user()->id;
+        $game->user_name = Auth::user()->name;
+        $game->name = $request->input('name');
+        $game->introduction = $request->input('introduction');
+        $game->template_id = $id;
         $mainSpiritFileName = '';
         $spirits = [];
         $GameConfig = [];
+        if($request->hasFile('illustration'))
+        {
+            $illustration = $request->file('illustration');
+            Image::make($illustration)->save(public_path('images/').$game->id . $illustration->getClientOriginalExtension());
+        }else{
+            $game->illustration = '/images/illustration.jpg';
+        }
         if($request->hasFile('mainSpirit')){
             $image = $request->file('mainSpirit');
-            $game->name = 'testUpload';
-            $game->user_id = Auth::user()->id;
-            $game->user_name = Auth::user()->name;
-            $game->template_id = $id;
-            $game->introduction = '11111';
             $game->save();
             $mainSpiritFileName = $game->id .'mainSpirit.' . $image->getClientOriginalExtension();
             Image::make($image)->save(public_path('images/').$mainSpiritFileName);
         }else{
             $image = $request->file('mainSpirit');
-            $game->name = 'testUpload';
-            $game->user_id = Auth::user()->id;
-            $game->user_name = Auth::user()->name;
-            $game->template_id = $id;
-            $game->introduction = '11111';
             $game->save();
-            $mainSpiritFileName = 'default.png';
+            $mainSpiritFileName = 'mainDefault.png';
         }
 
         for($i=0;$i<$request->input('spiritLength');$i++){
@@ -107,9 +109,8 @@ class GameController extends Controller
             'spiritsV'=>(double)($request->input('spiritsV')),
         'spirits'=>$spirits,
         ];
-        Storage::put($game->id.'.json',json_encode($GameConfig));
-        return $GameConfig;
-//        return $GameConfig;
+        Storage::put('configData/' . $game->id.'.json',json_encode($GameConfig));
+        return redirect('/my/'.Auth::user()->id)->withUser(Auth::user()->id);
 
     }
 
@@ -121,6 +122,78 @@ class GameController extends Controller
     public function showAddGame($id){
         return view('my/addGame')->withTemplate(Template::find($id));
     }
+
+    /**
+     * @param int $id
+     * @param \Illuminate\Http\Request
+     * @return string GameConfig
+     **/
+    public function updateGame($id,Request $request){
+
+        $game = Game::find($id);
+        $game->user_id = Auth::user()->id;
+        $game->user_name = Auth::user()->name;
+        $game->name = $request->input('name');
+        $game->introduction = $request->input('introduction');
+        $game->template_id = $id;
+        $mainSpiritFileName = '';
+        $spirits = [];
+        $GameConfig = [];
+        if($request->hasFile('illustration'))
+        {
+            $illustration = $request->file('illustration');
+            Image::make($illustration)->save(public_path('images/').$game->id . $illustration->getClientOriginalExtension());
+        }else{
+            $game->illustration = '/images/illustration.jpg';
+        }
+        if($request->hasFile('mainSpirit')){
+            $image = $request->file('mainSpirit');
+            $game->save();
+            $mainSpiritFileName = $game->id .'mainSpirit.' . $image->getClientOriginalExtension();
+            Image::make($image)->save(public_path('images/').$mainSpiritFileName);
+        }else{
+            $image = $request->file('mainSpirit');
+            $game->save();
+            $mainSpiritFileName = 'mainDefault.png';
+        }
+
+        for($i=0;$i<$request->input('spiritLength');$i++){
+            $temp = 'spirit'.$i;
+            $tempY = 'spiritY'.$i;
+            $tempR = 'spiritR'.$i;
+            $spiritName = '';
+            $tempSpirit = [];
+            if($request->file($temp)){
+                $spirit = $request->file($temp);
+                $spiritName = $game->id .$temp.'.' . $spirit->getClientOriginalExtension();
+                Image::make($spirit)->save(public_path('images/').$spiritName);
+            }else{
+                $spiritName = 'default.png';
+            }
+            $tempSpirit = [
+                'src'=>'/images/'.$spiritName,
+                'index'=>$i,
+                'x'=>0,
+                'y'=>(double)($request->input($tempY)),
+                'r'=>(double)($request->input($tempR)),
+            ];
+            array_push($spirits,$tempSpirit);
+        }
+        $GameConfig = ['mainSpirit'=>[
+            'src'=>'/images/'.$mainSpiritFileName,
+            'index'=>0,
+            'x'=>(double)($request->input('mainSpiritX')),
+            'r'=>(double)($request->input('mainSpiritR')),
+        ],
+            'spiritsV'=>(double)($request->input('spiritsV')),
+            'spirits'=>$spirits,
+        ];
+        Storage::put('configData/' . $game->id.'.json',json_encode($GameConfig));
+        return redirect('/my/'.Auth::user()->id)->withUser(Auth::user()->id);
+
+    }
+
+
 
 
     /**

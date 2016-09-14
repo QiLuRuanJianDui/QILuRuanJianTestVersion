@@ -12,11 +12,9 @@ class TemplateTableSeeder extends Seeder
     public function run()
     {
         DB::table('templates')->delete();
-        for($i=1;$i<9;$i++){
             \App\Template::create([
-               'name'=>'template'.$i,
-                'help'=>'help'.$i,
+               'name'=>'template1',
+                'help'=>'help1',
             ]);
-        }
     }
 }

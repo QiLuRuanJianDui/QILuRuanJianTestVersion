@@ -19,6 +19,7 @@ class CreateGamesTable extends Migration
             $table->integer('template_id');
             $table->string('user_name');
             $table->string('introduction')->nullable();
+            $table->string('illustration');
             $table->timestamps();
         });
     }

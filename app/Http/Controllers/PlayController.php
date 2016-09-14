@@ -13,7 +13,7 @@ class PlayController extends Controller
     //
     public function index($id){
         if(Game::findOrFail($id)){
-            $filename = $id . '.json';
+            $filename = 'configData/'.$id . '.json';
             $data = [
                 'game' => Game::with('hasManyComments')->find($id),
                 'config'=> json_decode(Storage::get($filename)),
